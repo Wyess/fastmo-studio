@@ -20,3 +20,24 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
+----------------------------------------------------------------------
+Third-Party Licenses
+
+This project includes third-party open-source software:
+
+1. Sonic
+   - License: Apache License 2.0
+   - Copyright: Copyright 2010, Bill Cox
+   - URL: https://github.com/WaywardGeek/sonic
+
+2. JSZip
+   - License: MIT License
+   - Copyright: Copyright (c) 2009-2016 Stuart Knightley, David Duponchel, Franz Buchinger, António Afonso
+   - URL: https://github.com/Stuk/jszip
+
+3. music-metadata-browser
+   - License: MIT License
+   - Copyright: Copyright (c) 2017 Borewit
+   - URL: https://github.com/Borewit/music-metadata-browser
+----------------------------------------------------------------------
+
