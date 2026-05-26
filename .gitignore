@@ -1,0 +1,11 @@
+.DS_Store
+Thumbs.db
+
+*~
+*.swp
+
+*.mp3
+*.wav
+*.aac
+*.m4a
+
