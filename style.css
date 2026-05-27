@@ -75,11 +75,13 @@ select:disabled, input[type="file"]:disabled {
 .radio-group input[type="radio"] {
     display: none;
 }
+
 .radio-group input[type="radio"]:checked + .radio-label {
     background: rgba(56, 189, 248, 0.2);
     border-color: var(--accent);
     color: var(--accent);
 }
+
 .radio-group input[type="radio"]:disabled + .radio-label {
     opacity: 0.4;
     cursor: not-allowed;
@@ -126,10 +128,12 @@ select:disabled, input[type="file"]:disabled {
     box-shadow: 0 -10px 30px rgba(0,0,0,0.5);
     display: none;
 }
+
 .player-container {
     max-width: 600px;
     margin: 0 auto;
 }
+
 .track-info {
     font-size: 13px;
     color: var(--text-muted);
@@ -138,10 +142,12 @@ select:disabled, input[type="file"]:disabled {
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
 audio {
     width: 100%;
     height: 36px;
 }
+
 .radio-label small {
     display: block;
     font-size: 10px;
@@ -149,3 +155,32 @@ audio {
     color: var(--text-muted);
 }
 
+.lang-switcher {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.lang-switcher button {
+    background: #1e293b;
+    color: #94a3b8;
+    border: 1px solid #334155;
+    padding: 4px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.lang-switcher button:hover {
+    background: #334155;
+    color: #f8fafc;
+}
+
+html[lang="en"] #btn-lang-en,
+html[lang="ja"] #btn-lang-ja {
+    background: #0284c7;
+    color: #ffffff;
+    border-color: #38bdf8;
+    box-shadow: 0 0 8px rgba(56, 189, 248, 0.4);
+}

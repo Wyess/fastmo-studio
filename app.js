@@ -351,6 +351,8 @@ async function applyLanguage(lang) {
     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
     const translations = await response.json();
 
+    document.documentElement.lang = lang;
+
     // 2. [data-i18n] 属性を持つ要素をすべて書き換え
     document.querySelectorAll('[data-i18n]').forEach(element => {
       const key = element.getAttribute('data-i18n');
