@@ -1,0 +1,10 @@
+{
+  "title": "Fastmo Studio",
+  "subtitle": "High-speed audio tool for speed-listening",
+  "labelPreset": "1. Select Speed Preset",
+  "labelFormat": "2. Output Format",
+  "labelFile": "3. Select Audio File",
+  "btnConvert": "🟢 Export AAC File",
+  "msgSuccess": "Conversion complete! Listen below. Click again to save."
+}
+

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fastmo studio</title>
+    <title>Fastmo Studio</title>
     <style>
         :root {
             --bg-color: #0f172a;
@@ -157,10 +157,15 @@
 <body>
 
 <h2>Fastmo studio</h2>
-<div class="lead">速聴き用音声高速化ツール</div>
+<div class="lang-switcher">
+  <button id="btn-lang-en">English</button>
+  <button id="btn-lang-ja">日本語</button>
+</div>
+
+<div data-i18n="subtitle" class="lead">速聴き用音声高速化ツール</div>
 
 <div class="main-card">
-    <div class="section-title">1. 速度プリセットを選択</div>
+    <div data-i18n="labelPreset" class="section-title">1. 速度プリセットを選択</div>
     <select id="presetSelect">
         <option value="2_3_4_1" data-label="2.0_3.0_4.0_1.0x">2倍 ➔ 3倍 ➔ 4倍 ➔ 1倍速</option>
         <option value="1_2_3_4_1" data-label="1.0_2.0_3.0_4.0_1.0x">1倍 ➔ 2倍 ➔ 3倍 ➔ 4倍 ➔ 1倍速</option>

@@ -342,3 +342,39 @@ function createWavFileBuffer(pcmInt16Array, sampleRate, numChannels) {
 
     return buffer;
 }
+
+// 言語を切り替えるメイン関数
+async function applyLanguage(lang) {
+  try {
+    // 1. 指定された言語のJSONをフェッチ
+    const response = await fetch(`./lang/${lang}.json`);
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+    const translations = await response.json();
+
+    // 2. [data-i18n] 属性を持つ要素をすべて書き換え
+    document.querySelectorAll('[data-i18n]').forEach(element => {
+      const key = element.getAttribute('data-i18n');
+      if (translations[key]) {
+        // ボタンやラベルのテキストを書き換え
+        element.textContent = translations[key];
+      }
+    });
+
+    // 3. ユーザーの選択をブラウザに記憶させる
+    localStorage.setItem('fastmo-lang', lang);
+  } catch (error) {
+    console.error('Failed to load language file:', error);
+  }
+}
+
+// ページ読み込み時の初期化処理
+document.addEventListener('DOMContentLoaded', () => {
+  // ブラウザが記憶している言語があればそれを使い、なければデフォルトを英語（en）にする
+  const initialLang = localStorage.getItem('fastmo-lang') || 'en';
+  applyLanguage(initialLang);
+
+  // ボタンのクリックイベントを紐付け
+  document.getElementById('btn-lang-en').addEventListener('click', () => applyLanguage('en'));
+  document.getElementById('btn-lang-ja').addEventListener('click', () => applyLanguage('ja'));
+});
+

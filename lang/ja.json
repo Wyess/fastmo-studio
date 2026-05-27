@@ -1,0 +1,10 @@
+{
+  "title": "Fastmo Studio",
+  "subtitle": "速聴き用音声高速化ツール",
+  "labelPreset": "1. 速度プリセットを選択",
+  "labelFormat": "2. 出力フォーマット",
+  "labelFile": "3. 音声ファイルを選択",
+  "btnConvert": "🟢 AACファイルを出力",
+  "msgSuccess": "変換完了！下のプレイヤーですぐ聴けます。保存する場合はもう一度ボタンを押してください。"
+}
+
