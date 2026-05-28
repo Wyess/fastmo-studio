@@ -33,9 +33,44 @@ function resetProcessState() {
 
 // 💡 ロード完了ハンドラー（すべてのセットアップを安全にここで実行）
 window.Module = window.Module || {};
-window.Module.onRuntimeInitialized = () => {
+window.Module.onRuntimeInitialized = async () => {
     statusText.innerText = '準備完了。システムを使用できます。';
     processBtn.disabled = false;
+    // 1. WebCodecs (AudioEncoder) が存在するか、およびAACの設定がサポートされているか確認
+    let isAacSupported = false;
+
+    if (typeof AudioEncoder !== 'undefined') {
+        const aacConfig = {
+            codec: 'mp4a.40.2', // AAC-LC (Low Complexity) の識別子
+            numberOfChannels: 2,
+            sampleRate: 44100,
+            bitrate: 128000
+        };
+
+        try {
+            // ブラウザに設定がサポートされているか問い合わせる（非同期）
+            const support = await AudioEncoder.isConfigSupported(aacConfig);
+            isAacSupported = support.supported;
+        } catch (e) {
+            console.error('WebCodecs config check failed:', e);
+            isAacSupported = false;
+        }
+    }
+
+    // 2. 判定結果に基づいてUIを制御
+    if (!isAacSupported) {
+        console.warn('WebCodecs does not support AAC encoding in this environment.');
+
+        // AACラジオボタンを無効化
+        const aacRadio = document.getElementById('fmtAac');
+        if (aacRadio) aacRadio.disabled = true;
+
+        // 強制的にWAVを選択
+        const wavRadio = document.getElementById('fmtWav');
+        if (wavRadio) wavRadio.checked = true;
+    } else {
+        console.log('WebCodecs AAC encoding is fully supported!');
+    }
 
     // WASM初期化が確実に終わった段階で、各種イベントリスナーを安全にバインド
     fileInput.removeEventListener('change', resetProcessState);
