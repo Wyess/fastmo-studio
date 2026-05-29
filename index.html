@@ -153,6 +153,27 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <script src="./dist/sonic.js"></script>
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" href="icon-192x192.png">
+    <meta name="theme-color" content="#1e1e1e">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <script>
+        // ページロード完了後に Service Worker を安全に登録
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(registration => {
+                        console.log('PWA Service Worker 登録成功。スコープ:', registration.scope);
+                    })
+                    .catch(error => {
+                        console.error('PWA Service Worker 登録失敗:', error);
+                    });
+            });
+        }
+    </script>
+
 </head>
 <body>
 
