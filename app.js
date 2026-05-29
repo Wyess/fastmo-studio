@@ -135,7 +135,17 @@ processBtn.addEventListener('click', async () => {
 
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: originalSampleRate });
         const arrayBuffer = await file.arrayBuffer();
-        const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
+        let audioBuffer;
+        try {
+            audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
+        } catch (e) {
+            alert("お使いのブラウザではこのファイル形式はサポートされていません。");
+            isProcessed = true;
+            toggleUiLock(false);
+            resetProcessState();
+            statusText.innerText = `変換に失敗しました`;
+            return;
+        }
         audioCtx.close();
 
         const sampleRate = audioBuffer.sampleRate;
