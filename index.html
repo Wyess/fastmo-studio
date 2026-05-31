@@ -3,153 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fastmo studio</title>
-    <style>
-        :root {
-            --bg-color: #0f172a;
-            --card-bg: rgba(30, 41, 59, 0.7);
-            --card-border: rgba(255, 255, 255, 0.08);
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --accent: #38bdf8;
-            --success: #10b981;
-            --disabled: #334155;
-        }
-
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-            padding-bottom: 120px;
-        }
-
-        h2 { text-align: center; margin-bottom: 5px; }
-        .lead { text-align: center; color: var(--text-muted); font-size: 14px; margin-bottom: 25px; }
-
-        .main-card {
-            background: var(--card-bg);
-            border: 1px solid var(--card-border);
-            padding: 24px;
-            border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-        }
-
-        .section-title {
-            font-size: 14px;
-            font-weight: 700;
-            color: var(--accent);
-            margin-bottom: 8px;
-            text-transform: uppercase;
-        }
-
-        select, input[type="file"], .action-btn {
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 18px;
-            border-radius: 8px;
-            box-sizing: border-box;
-        }
-
-        select, input[type="file"] {
-            background: #1e293b;
-            color: #fff;
-            border: 1px solid var(--card-border);
-        }
-
-        select:disabled, input[type="file"]:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .radio-group {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-        .radio-label {
-            flex: 1;
-            background: #1e293b;
-            border: 1px solid var(--card-border);
-            padding: 12px;
-            border-radius: 8px;
-            text-align: center;
-            cursor: pointer;
-            font-weight: bold;
-        }
-        .radio-group input[type="radio"] {
-            display: none;
-        }
-        .radio-group input[type="radio"]:checked + .radio-label {
-            background: rgba(56, 189, 248, 0.2);
-            border-color: var(--accent);
-            color: var(--accent);
-        }
-        .radio-group input[type="radio"]:disabled + .radio-label {
-            opacity: 0.4;
-            cursor: not-allowed;
-        }
-
-        .action-btn {
-            background: var(--accent);
-            color: var(--bg-color);
-            font-size: 16px;
-            font-weight: 700;
-            border: none;
-            cursor: pointer;
-            margin-bottom: 0;
-            transition: all 0.2s ease;
-        }
-
-        .action-btn:disabled {
-            background: var(--disabled);
-            color: var(--text-muted);
-            cursor: not-allowed;
-        }
-
-        .action-btn.ready-to-download {
-            background: var(--success);
-            color: #fff;
-        }
-
-        #status {
-            text-align: center;
-            color: var(--accent);
-            font-weight: bold;
-            margin: 15px 0;
-        }
-
-        .player-panel {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: rgba(15, 23, 42, 0.95);
-            border-top: 1px solid var(--card-border);
-            padding: 15px 20px;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 -10px 30px rgba(0,0,0,0.5);
-            display: none;
-        }
-        .player-container {
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        .track-info {
-            font-size: 13px;
-            color: var(--text-muted);
-            margin-bottom: 8px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        audio {
-            width: 100%;
-            height: 36px;
-        }
-    </style>
+    <title data-i18n="title">Fastmo Studio</title>
+    <link rel="stylesheet" href="./style.css">
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <script src="./dist/sonic.js"></script>
@@ -177,35 +32,41 @@
 </head>
 <body>
 
-<h2>Fastmo studio</h2>
-<div class="lead">速聴き用音声高速化ツール</div>
+<p class="lang-switcher">
+  <button id="btn-lang-en">English</button>
+  <button id="btn-lang-ja">日本語</button>
+</p>
+
+<h2 data-i18n="title">Fastmo Studio</h2>
+
+<div data-i18n="subtitle" class="lead">速聴き用音声高速化ツール</div>
 
 <div class="main-card">
-    <div class="section-title">1. 速度プリセットを選択</div>
+    <div data-i18n="labelPreset" class="section-title">1. 速度プリセットを選択</div>
     <select id="presetSelect">
-        <option value="2_3_4_1" data-label="2.0_3.0_4.0_1.0x">2倍 ➔ 3倍 ➔ 4倍 ➔ 1倍速</option>
-        <option value="1_2_3_4_1" data-label="1.0_2.0_3.0_4.0_1.0x">1倍 ➔ 2倍 ➔ 3倍 ➔ 4倍 ➔ 1倍速</option>
-        <option value="2.0" data-label="2.0x">2倍速</option>
-        <option value="3.0" data-label="3.0x">3倍速</option>
-        <option value="4.0" data-label="4.0x">4倍速</option>
+        <option value="2_3_4_1" data-label="2.0_3.0_4.0_1.0x" data-i18n="opt2x3x4x1x">2倍 → 3倍 → 4倍 → 1倍速</option>
+        <option value="1_2_3_4_1" data-label="1.0_2.0_3.0_4.0_1.0x" data-i18n="opt1x2x3x4x1x">1倍 → 2倍 → 3倍 → 4倍 → 1倍速</option>
+        <option value="2.0" data-label="2.0x" data-i18n="opt2x">2倍速</option>
+        <option value="3.0" data-label="3.0x" data-i18n="opt3x">3倍速</option>
+        <option value="4.0" data-label="4.0x" data-i18n="opt4x">4倍速</option>
     </select>
 
-    <div class="section-title">2. 出力フォーマット</div>
+    <div class="section-title" data-i18n="labelFormat">2. 出力フォーマット</div>
     <div class="radio-group">
         <input type="radio" id="fmtAac" name="outFormat" value="aac" checked>
-        <label for="fmtAac" class="radio-label">AAC (.aac) <small style="display:block; font-size:10px; font-weight:normal; color:var(--text-muted);">サイズ圧縮・変換時間長</small></label>
+        <label for="fmtAac" class="radio-label">AAC (.aac) <small data-i18n="labelAacDesc">サイズ圧縮・変換時間長</small></label>
         
         <input type="radio" id="fmtWav" name="outFormat" value="wav">
-        <label for="fmtWav" class="radio-label">WAV (.wav) <small style="display:block; font-size:10px; font-weight:normal; color:var(--text-muted);">無圧縮・変換時間短</small></label>
+        <label for="fmtWav" class="radio-label">WAV (.wav) <small data-i18n="labelWavDesc">無圧縮・変換時間短</small></label>
     </div>
 
-    <div class="section-title">3. 音声ファイルを選択</div>
+    <div class="section-title" data-i18n="labelFile">3. 音声ファイルを選択</div>
     <input type="file" id="audioFiles" accept="audio/*" multiple>
 
-    <button id="processBtn" class="action-btn" disabled>一括変換スタート</button>
+    <button id="processBtn" class="action-btn" disabled data-i18n="btnStart">一括変換開始</button>
 </div>
 
-<p id="status">WASM初期化中...</p>
+<p id="status" data-i18n="msgWasmInitializing">WASM初期化中...</p>
 
 <div class="player-panel" id="playerPanel">
     <div class="player-container">
@@ -213,6 +74,8 @@
         <audio id="mainPlayer" controls></audio>
     </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/vconsole/dist/vconsole.min.js"></script>
 
 <script type="module" src="app.js"></script>
 

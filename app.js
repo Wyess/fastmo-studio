@@ -13,29 +13,34 @@ let currentTrackIndex = 0;
 let finalDownloadBlob = null;
 let finalDownloadName = "";
 let isProcessed = false;
+let translations = [];
 
 const player = document.getElementById('mainPlayer');
 const processBtn = document.getElementById('processBtn');
 const fileInput = document.getElementById('audioFiles');
 const presetSelect = document.getElementById('presetSelect');
 const statusText = document.getElementById('status');
+  const langEnBtn = document.getElementById('btn-lang-en');
+  const langJaBtn = document.getElementById('btn-lang-ja');
+
+const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 // 💡 設定変更時のリセット関数を安全に定義
 function resetProcessState() {
     if (!isProcessed) return; // 既に未変換状態なら何もしない
     isProcessed = false;
     finalDownloadBlob = null;
-    processBtn.innerText = "一括変換スタート";
+    processBtn.innerText = translations["btnStart"];
     processBtn.classList.remove('ready-to-download');
-    statusText.innerText = "設定が変更されました。変換ボタンを押してください。";
+    statusText.innerText = translations["msgSettingChanged"];
     statusText.style.color = "var(--accent)";
 }
 
 // 💡 ロード完了ハンドラー（すべてのセットアップを安全にここで実行）
 window.Module = window.Module || {};
 window.Module.onRuntimeInitialized = async () => {
-    statusText.innerText = '準備完了。システムを使用できます。';
     processBtn.disabled = false;
+    await sleep(200);
     // 1. WebCodecs (AudioEncoder) が存在するか、およびAACの設定がサポートされているか確認
     let isAacSupported = false;
 
@@ -83,12 +88,14 @@ window.Module.onRuntimeInitialized = async () => {
         el.removeEventListener('change', resetProcessState);
         el.addEventListener('change', resetProcessState);
     });
+    statusText.innerText = translations["msgReady"] || "System ready";
 };
 
 // 保険：すでにWASMロードが完了している場合の即時発火
 if (window.Module && window.Module._sonicCreateStream) {
     window.Module.onRuntimeInitialized();
 }
+const vConsole = new VConsole();
 
 processBtn.addEventListener('click', async () => {
     if (isProcessed && finalDownloadBlob) {
@@ -101,7 +108,7 @@ processBtn.addEventListener('click', async () => {
         return;
     }
 
-    if (!fileInput.files.length) return alert('ファイルを選択してください');
+    if (!fileInput.files.length) return alert(translations["msgSelectFiles"]);
 
     const selectedPreset = presetSelect.value;
     const presetLabel = presetSelect.options[presetSelect.selectedIndex].dataset.label;
@@ -109,7 +116,7 @@ processBtn.addEventListener('click', async () => {
     const format = document.querySelector('input[name="outFormat"]:checked').value;
 
     toggleUiLock(true);
-    statusText.innerText = '一括処理セッションを開始しました...';
+    statusText.innerText = translations["msgBatchStarted"];
     
     const zip = new JSZip();
     const files = Array.from(fileInput.files);
@@ -121,7 +128,7 @@ processBtn.addEventListener('click', async () => {
 
     for (let i = 0; i < files.length; i++) {
         const file = files[i];
-        statusText.innerText = `処理中 (${i + 1}/${files.length}): ${file.name}`;
+        statusText.innerText = `${translations["msgProcessing"]} (${i + 1}/${files.length}: ${file.name})`;
 
         let originalSampleRate = 44100;
         try {
@@ -139,11 +146,12 @@ processBtn.addEventListener('click', async () => {
         try {
             audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
         } catch (e) {
-            alert("お使いのブラウザではこのファイル形式はサポートされていません。");
+            alert(translations["msgUnsupportedFormat"]);
             isProcessed = true;
             toggleUiLock(false);
             resetProcessState();
-            statusText.innerText = `変換に失敗しました`;
+            statusText.innerText = translations["msgConversionFailed"];
+            audioCtx.close();
             return;
         }
         audioCtx.close();
@@ -207,10 +215,10 @@ processBtn.addEventListener('click', async () => {
         let outputBlob;
 
         if (format === 'aac') {
-            statusText.innerText = `AAC圧縮中 (${i + 1}/${files.length}): ${file.name}`;
+            statusText.innerText = translations["msgGeneratingAac"].replace("{status}", `${i + 1}/${files.length}: ${file.name}`);
             outputBlob = await encodePcmToPureAAC(finalPcmSamples, sampleRate, numChannels);
         } else {
-            statusText.innerText = `WAVヘッダー生成中 (${i + 1}/${files.length}): ${file.name}`;
+            statusText.innerText = translations["msgGeneratingiWav"].replace("status", `(${i + 1}/${files.length}: ${file.name}`);
             const wavBuffer = createWavFileBuffer(finalPcmSamples, sampleRate, numChannels);
             outputBlob = new Blob([wavBuffer], { type: 'audio/wav' });
         }
@@ -237,7 +245,7 @@ processBtn.addEventListener('click', async () => {
         finalDownloadBlob = lastOutputBlob;
         finalDownloadName = lastOutputName;
     } else {
-        statusText.innerText = 'ZIP圧縮アーカイブを作成中...';
+        statusText.innerText = translations["msgZipping"];
         finalDownloadBlob = await zip.generateAsync({ type: 'blob' });
         finalDownloadName = `sonic_processed_${format}.zip`;
     }
@@ -245,10 +253,10 @@ processBtn.addEventListener('click', async () => {
     isProcessed = true;
     toggleUiLock(false);
 
-    statusText.innerText = `変換完了！下のプレイヤーで今すぐ聴けます。保存する場合はもう一度ボタンを押してください。`;
+    statusText.innerText = translations["msgSuccess"];
     statusText.style.color = 'var(--success)';
 
-    processBtn.innerText = files.length === 1 ? `🟢 ${ext.toUpperCase()}ファイルを出力` : `🟢 ZIPファイルをダウンロード`;
+    processBtn.innerText = translations[ "msgOutputCommand"].replace("{ext}", files.length === 1 ? ext.toUpperCase() : "ZIP");
     processBtn.classList.add('ready-to-download');
 
     if (playlist.length > 0) {
@@ -263,9 +271,13 @@ function toggleUiLock(disabled) {
     document.querySelectorAll('input[name="outFormat"]').forEach(el => el.disabled = disabled);
     if (disabled) {
         processBtn.disabled = true;
-        processBtn.innerText = "処理中...";
+        processBtn.innerText = translations["msgProcessing"] + "...";
+        langEnBtn.disabled = true;
+        langJaBtn.disabled = true;
     } else {
         processBtn.disabled = false;
+        langEnBtn.disabled = false;
+        langJaBtn.disabled = false;
     }
 }
 
@@ -291,7 +303,7 @@ player.addEventListener('ended', () => {
         // 次のトラックをセット
         playTrack(currentTrackIndex + 1);
         // 2曲目以降の連続再生時は、ユーザーが一度再生を始めているので自動再生してOK
-        document.getElementById('trackInfo').innerText = `再生中 (${currentTrackIndex + 1}/${playlist.length}): ${playlist[currentTrackIndex].name}`;
+        document.getElementById('trackInfo').innerText = `${currentTrackIndex + 1}/${playlist.length}: ${playlist[currentTrackIndex].name}`;
         player.play();
     }
 });
@@ -387,3 +399,42 @@ function createWavFileBuffer(pcmInt16Array, sampleRate, numChannels) {
 
     return buffer;
 }
+
+// 言語を切り替えるメイン関数
+async function applyLanguage(lang) {
+  try {
+    const savedLang = localStorage.getItem('fastmo-lang');
+    localStorage.setItem('fastmo-lang', lang);
+    if (lang !== savedLang) location.reload();
+
+    // 1. 指定された言語のJSONをフェッチ
+    const response = await fetch(`./lang/${lang}.json`);
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+    translations = await response.json();
+
+    document.documentElement.lang = lang;
+
+    // 2. [data-i18n] 属性を持つ要素をすべて書き換え
+    document.querySelectorAll('[data-i18n]').forEach(element => {
+      const key = element.getAttribute('data-i18n');
+      if (translations[key]) {
+        // ボタンやラベルのテキストを書き換え
+        element.textContent = translations[key];
+      }
+    });
+  } catch (error) {
+    console.error('Failed to load language file:', error);
+  }
+}
+
+// ページ読み込み時の初期化処理
+document.addEventListener('DOMContentLoaded', () => {
+  // ブラウザが記憶している言語があればそれを使い、なければデフォルトを英語（en）にする
+  const initialLang = localStorage.getItem('fastmo-lang') || 'en';
+  applyLanguage(initialLang);
+
+  // ボタンのクリックイベントを紐付け
+  document.getElementById('btn-lang-en').addEventListener('click', () => applyLanguage('en'));
+  document.getElementById('btn-lang-ja').addEventListener('click', () => applyLanguage('ja'));
+});
+
