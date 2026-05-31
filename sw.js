@@ -7,8 +7,8 @@ const ASSETS_TO_CACHE = [
     './index.html',
     './manifest.json',
     './app.js',
-    './lang/en.json'
-    './lang/ja.json'
+    './lang/en.json',
+    './lang/ja.json',
     './dist/sonic.js',
     './dist/sonic.wasm'
 ];
