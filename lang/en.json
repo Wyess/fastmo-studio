@@ -1,10 +1,30 @@
 {
   "title": "Fastmo Studio",
-  "subtitle": "High-speed audio tool for speed-listening",
+  "subtitle": "Fast audio in your pocket",
   "labelPreset": "1. Select Speed Preset",
+  "opt2x3x4x1x": "2x → 3x → 4x → 1x speed loop",
+  "opt1x2x3x4x1x": "1x → 2x → 3x → 4x → 1x speed loop",
+  "opt2x": "2x Speed",
+  "opt3x": "3x Speed",
+  "opt4x": "4x Speed",
   "labelFormat": "2. Output Format",
   "labelFile": "3. Select Audio File",
+  "btnStart": "Start Batch Conversion",
   "btnConvert": "🟢 Export AAC File",
-  "msgSuccess": "Conversion complete! Listen below. Click again to save."
+  "msgWasmInitializing": "Initializing WASM...",
+  "msgSuccess": "Conversion complete! Listen below. Press the button again to save.",
+  "labelAacDesc": "Reduced size / longer processing",
+  "labelWavDesc": "No compression / shorter processing",
+  "msgSettingChanged": "Settings changed. Press the conversion button again.",
+  "msgReady": "System ready",
+  "msgSelectFiles": "Choose audio file(s)",
+  "msgBatchStarted": "Batch processing started...",
+  "msgProcessing": "Processing...",
+  "msgUnsupportedFormat": "This file format is not supported by your browser.",
+  "msgConversionFailed": "Conversion failed",
+  "msgGeneratingAac": "Generating AAC file ({status})",
+  "msgGeneratingWav": "Generating WAV header ({status})",
+  "msgZipping": "Generating ZIP archive...",
+  "msgOutputCommand": "🟢 Download {ext} file"
 }
 

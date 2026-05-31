@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fastmo Studio</title>
+    <title data-i18n="title">Fastmo Studio</title>
     <link rel="stylesheet" href="./style.css">
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
@@ -11,40 +11,41 @@
 </head>
 <body>
 
-<h2>Fastmo studio</h2>
-<div class="lang-switcher">
+<p class="lang-switcher">
   <button id="btn-lang-en">English</button>
   <button id="btn-lang-ja">日本語</button>
-</div>
+</p>
+
+<h2 data-i18n="title">Fastmo Studio</h2>
 
 <div data-i18n="subtitle" class="lead">速聴き用音声高速化ツール</div>
 
 <div class="main-card">
     <div data-i18n="labelPreset" class="section-title">1. 速度プリセットを選択</div>
     <select id="presetSelect">
-        <option value="2_3_4_1" data-label="2.0_3.0_4.0_1.0x">2倍 ➔ 3倍 ➔ 4倍 ➔ 1倍速</option>
-        <option value="1_2_3_4_1" data-label="1.0_2.0_3.0_4.0_1.0x">1倍 ➔ 2倍 ➔ 3倍 ➔ 4倍 ➔ 1倍速</option>
-        <option value="2.0" data-label="2.0x">2倍速</option>
-        <option value="3.0" data-label="3.0x">3倍速</option>
-        <option value="4.0" data-label="4.0x">4倍速</option>
+        <option value="2_3_4_1" data-label="2.0_3.0_4.0_1.0x" data-i18n="opt2x3x4x1x">2倍 → 3倍 → 4倍 → 1倍速</option>
+        <option value="1_2_3_4_1" data-label="1.0_2.0_3.0_4.0_1.0x" data-i18n="opt1x2x3x4x1x">1倍 → 2倍 → 3倍 → 4倍 → 1倍速</option>
+        <option value="2.0" data-label="2.0x" data-i18n="opt2x">2倍速</option>
+        <option value="3.0" data-label="3.0x" data-i18n="opt3x">3倍速</option>
+        <option value="4.0" data-label="4.0x" data-i18n="opt4x">4倍速</option>
     </select>
 
-    <div class="section-title">2. 出力フォーマット</div>
+    <div class="section-title" data-i18n="labelFormat">2. 出力フォーマット</div>
     <div class="radio-group">
         <input type="radio" id="fmtAac" name="outFormat" value="aac" checked>
-        <label for="fmtAac" class="radio-label">AAC (.aac) <small>サイズ圧縮・変換時間長</small></label>
+        <label for="fmtAac" class="radio-label">AAC (.aac) <small data-i18n="labelAacDesc">サイズ圧縮・変換時間長</small></label>
         
         <input type="radio" id="fmtWav" name="outFormat" value="wav">
-        <label for="fmtWav" class="radio-label">WAV (.wav) <small>無圧縮・変換時間短</small></label>
+        <label for="fmtWav" class="radio-label">WAV (.wav) <small data-i18n="labelWavDesc">無圧縮・変換時間短</small></label>
     </div>
 
-    <div class="section-title">3. 音声ファイルを選択</div>
+    <div class="section-title" data-i18n="labelFile">3. 音声ファイルを選択</div>
     <input type="file" id="audioFiles" accept="audio/*" multiple>
 
-    <button id="processBtn" class="action-btn" disabled>一括変換スタート</button>
+    <button id="processBtn" class="action-btn" disabled data-i18n="btnStart">一括変換開始</button>
 </div>
 
-<p id="status">WASM初期化中...</p>
+<p id="status" data-i18n="msgWasmInitializing">WASM初期化中...</p>
 
 <div class="player-panel" id="playerPanel">
     <div class="player-container">
@@ -52,6 +53,8 @@
         <audio id="mainPlayer" controls></audio>
     </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/vconsole/dist/vconsole.min.js"></script>
 
 <script type="module" src="app.js"></script>
 
