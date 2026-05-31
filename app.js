@@ -95,7 +95,6 @@ window.Module.onRuntimeInitialized = async () => {
 if (window.Module && window.Module._sonicCreateStream) {
     window.Module.onRuntimeInitialized();
 }
-const vConsole = new VConsole();
 
 processBtn.addEventListener('click', async () => {
     if (isProcessed && finalDownloadBlob) {
