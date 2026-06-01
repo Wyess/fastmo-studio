@@ -13,12 +13,14 @@ let currentTrackIndex = 0;
 let finalDownloadBlob = null;
 let finalDownloadName = "";
 let isProcessed = false;
+let isAacSupported = false;
 let translations = [];
 
 const player = document.getElementById('mainPlayer');
 const processBtn = document.getElementById('processBtn');
 const fileInput = document.getElementById('audioFiles');
 const presetSelect = document.getElementById('presetSelect');
+const aacRadio = document.getElementById('fmtAac');
 const statusText = document.getElementById('status');
   const langEnBtn = document.getElementById('btn-lang-en');
   const langJaBtn = document.getElementById('btn-lang-ja');
@@ -42,7 +44,7 @@ window.Module.onRuntimeInitialized = async () => {
     processBtn.disabled = false;
     await sleep(200);
     // 1. WebCodecs (AudioEncoder) が存在するか、およびAACの設定がサポートされているか確認
-    let isAacSupported = false;
+    isAacSupported = false;
 
     if (typeof AudioEncoder !== 'undefined') {
         const aacConfig = {
@@ -67,8 +69,7 @@ window.Module.onRuntimeInitialized = async () => {
         console.warn('WebCodecs does not support AAC encoding in this environment.');
 
         // AACラジオボタンを無効化
-        const aacRadio = document.getElementById('fmtAac');
-        if (aacRadio) aacRadio.disabled = true;
+        aacRadio.disabled = true;
 
         // 強制的にWAVを選択
         const wavRadio = document.getElementById('fmtWav');
@@ -268,6 +269,7 @@ function toggleUiLock(disabled) {
     fileInput.disabled = disabled;
     presetSelect.disabled = disabled;
     document.querySelectorAll('input[name="outFormat"]').forEach(el => el.disabled = disabled);
+    aacRadio.disabled = !isAacSupported;
     if (disabled) {
         processBtn.disabled = true;
         processBtn.innerText = translations["msgProcessing"] + "...";
