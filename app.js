@@ -217,7 +217,7 @@ processBtn.addEventListener('click', async () => {
             statusText.innerText = translations["msgGeneratingAac"].replace("{status}", `${i + 1}/${files.length}: ${file.name}`);
             outputBlob = await encodePcmToPureAAC(finalPcmSamples, sampleRate, numChannels);
         } else {
-            statusText.innerText = translations["msgGeneratingiWav"].replace("status", `(${i + 1}/${files.length}: ${file.name}`);
+            statusText.innerText = translations["msgGeneratingWav"].replace("status", `(${i + 1}/${files.length}: ${file.name}`);
             const wavBuffer = createWavFileBuffer(finalPcmSamples, sampleRate, numChannels);
             outputBlob = new Blob([wavBuffer], { type: 'audio/wav' });
         }
