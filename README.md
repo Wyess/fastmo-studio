@@ -43,13 +43,13 @@ The name is a multi-layered hybrid tribute to speed and ubiquity:
 ```bash
    git clone https://github.com/Wyess/fastmo-studio.git
    cd fastmo-studio
-   ```
+```
 
 2. Start a local static server (e.g., using Python, Node.js, etc.):
 ### Example using Python
 ```bash
     python3 -m http.server 8080
-    ```
+```
 
 3. Open http://localhost:8080 in your browser.
 
